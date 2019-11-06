@@ -1,8 +1,8 @@
 
 minetest.register_craft({
-	output="naturia2:yarrow_seeds",
+	output="naturia2:wirryn_seeds",
 	type="shapeless",
-	recipe={"naturia2:yarrow"},
+	recipe={"naturia2:wirryn"},
 })
 
 minetest.register_craft({
