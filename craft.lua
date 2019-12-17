@@ -120,3 +120,17 @@ minetest.register_craft({
 	type="shapeless",
 	replacements={{"naturia2:knife2","naturia2:knife2"}, {"naturia2:beech_tree", "naturia2:beech_wood 4"}}
 })
+
+minetest.register_craft({
+	output="naturia2:incense",
+	recipe={"naturia2:mildew", "naturia2:rowan_stick", "naturia2:coagulant"},
+	type="shapeless",
+	replacements={{"naturia2:mildew","naturia2:bottle_2 2"}}
+})
+
+minetest.register_craft({
+	output="naturia2:incense_attach",
+	recipe={"naturia2:incense", "naturia2:acid"},
+	replacements={{"naturia2:acid","naturia2:bottle_2"}}
+	type="shapeless",
+})

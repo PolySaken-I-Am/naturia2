@@ -32,7 +32,7 @@ minetest.register_craftitem("naturia2:knife2", {
 })
 
 minetest.register_craftitem("naturia2:rowan_wand", {
-	description = "Rowan Càna",
+	description = "Rowan Càdre",
 	inventory_image = "n2_rowan_wand.png",
 	stack_max=1,
 	on_use=function(itemstack, placer, pointed_thing)
@@ -94,4 +94,29 @@ minetest.register_tool("naturia2:rune_paste", {
 minetest.register_craftitem("naturia2:mildew", {
 	description = "Black Beech Mold",
 	inventory_image = "n2_mildew.png",
+})
+
+minetest.register_craftitem("naturia2:incense", {
+	description = "Incense Stick",
+	inventory_image = "n2_rowan_twig2.png",
+})
+
+minetest.register_craftitem("naturia2:incense_attach", {
+	description = "Incense of Attachment",
+	inventory_image = "n2_rowan_twig3.png",
+})
+
+minetest.register_craftitem("naturia2:incense_flow", {
+	description = "Incense of The Flow",
+	inventory_image = "n2_rowan_twig4.png",
+})
+
+minetest.register_craftitem("naturia2:incense_asp", {
+	description = "Incense of Lan Arèd",
+	inventory_image = "n2_rowan_twig4.png",
+})
+
+minetest.register_craftitem("naturia2:incense_ared", {
+	description = "Incense of Lan Luicke",
+	inventory_image = "n2_rowan_twig5.png",
 })
