@@ -108,15 +108,30 @@ minetest.register_craftitem("naturia2:incense_attach", {
 
 minetest.register_craftitem("naturia2:incense_flow", {
 	description = "Incense of The Flow",
-	inventory_image = "n2_rowan_twig4.png",
+	inventory_image = "n2_rowan_twig6.png",
 })
 
 minetest.register_craftitem("naturia2:incense_asp", {
 	description = "Incense of Lan Arèd",
+	inventory_image = "n2_rowan_twig5.png",
+})
+
+minetest.register_craftitem("naturia2:incense_nsp", {
+	description = "Incense of Lan Luicke",
 	inventory_image = "n2_rowan_twig4.png",
 })
 
-minetest.register_craftitem("naturia2:incense_ared", {
-	description = "Incense of Lan Luicke",
-	inventory_image = "n2_rowan_twig5.png",
+minetest.register_craftitem("naturia2:nightshade", {
+	description = "Nightshade Sprig",
+	inventory_image = "n2_nightshade_i.png",
+})
+
+minetest.register_craftitem("naturia2:incense_heal", {
+	description = "Incense of The Scab",
+	inventory_image = "n2_rowan_twig7.png",
+})
+
+minetest.register_craftitem("naturia2:incense_harm", {
+	description = "Incense of The Wound",
+	inventory_image = "n2_rowan_twig8.png",
 })

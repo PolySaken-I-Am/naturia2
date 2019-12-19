@@ -131,6 +131,46 @@ minetest.register_craft({
 minetest.register_craft({
 	output="naturia2:incense_attach",
 	recipe={"naturia2:incense", "naturia2:acid"},
-	replacements={{"naturia2:acid","naturia2:bottle_2"}}
+	replacements={{"naturia2:acid","naturia2:bottle_2"}},
 	type="shapeless",
+})
+
+minetest.register_craft({
+	output="naturia2:incense_flow",
+	recipe={"naturia2:incense", "naturia2:coagulant"},
+	replacements={{"naturia2:coagulant","naturia2:bottle_2"}},
+	type="shapeless",
+})
+
+minetest.register_craft({
+	output="naturia2:incense_nsp",
+	recipe={"naturia2:incense", "naturia2:rowan_sprig"},
+	type="shapeless",
+})
+
+minetest.register_craft({
+	output="naturia2:incense_asp",
+	recipe={"naturia2:incense", "naturia2:yew_leaves"},
+	type="shapeless",
+})
+
+minetest.register_craft({
+	output="naturia2:incense_heal",
+	recipe={"naturia2:incense", "naturia2:nightshade"},
+	type="shapeless",
+})
+
+minetest.register_craft({
+	output="naturia2:incense_harm",
+	recipe={"naturia2:incense", "naturia2:yarrow"},
+	type="shapeless",
+})
+
+minetest.register_craft({
+	output="naturia2:ennolte",
+	recipe={
+		{"", "default:cobble", ""},
+		{"", "default:stone", ""},
+		{"default:stone", "default:stone", "default:stone"}
+	},
 })

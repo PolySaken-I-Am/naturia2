@@ -119,11 +119,21 @@ minetest.register_node("naturia2:yarrow_growing", {
 	drop="naturia2:yarrow",
 })
 
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	fill_ratio=0.0002,
+	y_min = -300,
+	y_max = 300,
+	decoration="naturia2:yarrow_growing",
+})
+
 minetest.register_node("naturia2:paste", {
 	description = "paste",
 	tiles = {"n2_paste2.png"},
 	drop = "",
-	connects_to={"naturia2:paste"},
+	connects_to={"naturia2:paste", "naturia2:stone_i"},
 	walkable = false,
 	sounds = default.node_sound_leaves_defaults(),
 	groups={not_in_creative_inventory=1, snappy=3},
@@ -131,10 +141,164 @@ minetest.register_node("naturia2:paste", {
 	paramtype = "light",
 	node_box = {
 		type = "connected",
-		fixed =         {-0.25, -0.5, -0.25, 0.25, -0.47, 0.25},
-		connect_front = {-0.25, -0.5, -0.5, 0.25, -0.47, 0.25},
-		connect_back =  {-0.25, -0.5, 0.5, 0.25, -0.47, 0.25},
-		connect_left =  {-0.25, -0.5, -0.25, -0.5, -0.47, 0.25},
-		connect_right =  {-0.25, -0.5, -0.25, 0.5, -0.47, 0.25},
+		fixed =         {-0.125, -0.5, -0.125, 0.125, -0.47, 0.125},
+		connect_front = {-0.125, -0.5, -0.5, 0.125, -0.47, 0.125},
+		connect_back =  {-0.125, -0.5, 0.5, 0.125, -0.47, 0.125},
+		connect_left =  {-0.125, -0.5, -0.125, -0.5, -0.47, 0.125},
+		connect_right =  {-0.125, -0.5, -0.125, 0.5, -0.47, 0.125},
 	}
+})
+
+minetest.register_node("naturia2:nightshade_growing", {
+	description = "Nightshade",
+	drawtype = "plantlike",
+	tiles = {"n2_nightshade.png"},
+	inventory_image = "n2_nightshade.png",
+	wield_image = "n2_nightshade.png",
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	selection_box = {
+		type = "fixed",
+		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 0.5, 6 / 16},
+	},
+	groups = {snappy = 3, flammable = 2, not_in_creative_inventory=1},
+	sounds = default.node_sound_leaves_defaults(),
+	drop="naturia2:nightshade",
+})
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	fill_ratio=0.0002,
+	y_min = -300,
+	y_max = 300,
+	decoration="naturia2:nightshade_growing",
+})
+
+
+
+minetest.register_entity("naturia2:floater",{
+	hp_max = 1,
+	visual="wielditem",
+	visual_size={x=.33,y=.33},
+	collisionbox = {0,0,0,0,0,0},
+	physical=false,
+	textures={"air"},
+})
+
+local rm = function(pos)
+	local objs = minetest.env:get_objects_inside_radius({x=pos.x,y=pos.y+1,z=pos.z}, 0.5)
+	if objs then
+		for _, obj in ipairs(objs) do
+			if obj and obj:get_luaentity() and obj:get_luaentity().name == "naturia2:floater" then
+				obj:remove()
+			end
+		end
+	end
+end
+
+local up = function(pos, r, m)
+	rm(pos)
+	local meta = minetest.get_meta(pos)
+	if meta:get_string("item") ~= "" then
+		pos.y = pos.y + 0.6
+		local texture = ItemStack(meta:get_string("item")):get_name()
+		local ent=minetest.add_entity(pos, "naturia2:floater")
+		ent:set_properties({textures={texture}})
+		if r and type(r)=="number" then ent:set_yaw(r) end
+		local ep=ent:get_pos()
+		if m and type(m)=="table" then ent:set_pos({x=ep.x+m.x,y=ep.y,z=ep.z+m.z}) end
+	end
+end
+
+
+local d = function(pos)
+	local meta = minetest.get_meta(pos)
+	if meta:get_string("item") ~= "" then
+		minetest.add_item({x=pos.x,y=pos.y+1,z=pos.z}, meta:get_string("item"))
+		meta:set_string("item","")
+	end
+	rm(pos)
+end
+
+minetest.register_node("naturia2:ennolte", {
+	description="Ennoltè",
+	tiles={"default_stone.png", "default_stone.png", "default_stone.png"},
+	sunlight_propagates=true,
+	is_ground_content=false,
+	groups={cracky=3, oddly_breakable_by_hand=3},
+	sounds=default.node_sound_stone_defaults(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3, -0.5, -0.3, 0.3, 0.4, 0.3},
+			{-0.5, -0.5, -0.5, 0.5, -0.4, 0.5}
+		},
+	},
+	on_rightclick = function(pos, node, clicker, itemstack)
+		local meta = minetest.get_meta(pos)
+		if itemstack then
+			d(pos)
+			meta:set_string("item", itemstack:get_name())
+			itemstack:take_item()
+			up(pos)
+		else
+			d(pos)
+		end
+		return itemstack
+	end,
+	on_destruct = function(pos)
+		d(pos)
+	end,
+	on_punch = function(pos, node, player, pointed_thing)
+		if player:get_wielded_item():get_definition().groups.axe==1 then
+			local meta=minetest.get_meta(pos)
+			local item=meta:get_string("item")
+			if item then
+				if truCraft.chops[item] then
+					rm(pos)
+					minetest.add_item({x=pos.x,y=pos.y+1,z=pos.z}, truCraft.chops[item])
+					meta:set_string("item", "")
+				end
+			end
+		end
+	end,
+})
+
+minetest.register_lbm({
+	name = "naturia2:fix_ent",
+	run_at_every_load=true,
+	nodenames = {"naturia2:ennolte"},
+	action = function(pos, node)
+		local meta=minetest.get_meta(pos)
+		local r=0
+		if meta:get_int("itemr") then r=meta:get_int("itemr") end
+		local m={x=0, z=0}
+		if meta:get_int("plposx") then m.x=meta:get_int("plposx") end
+		if meta:get_int("plposz") then m.z=meta:get_int("plposz") end
+		up(pos, r, m)
+	end,
+})
+
+minetest.register_node("naturia2:rune_1", {
+	description="Oghess",
+	tiles={"default_stone.png", "default_stone.png", "default_stone.png^n2_rune1.png"},
+	sunlight_propagates=true,
+	is_ground_content=false,
+	groups={cracky=3, oddly_breakable_by_hand=3},
+	sounds=default.node_sound_stone_defaults(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3, -0.4, -0.3, 0.3, 0.4, 0.3},
+			{-0.2, -0.4, -0.2, 0.2, 0.5, 0.2},
+			{-0.35, -0.5, -0.35, 0.35, -0.4, 0.35},
+		},
+	},
 })
