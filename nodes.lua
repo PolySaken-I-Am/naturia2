@@ -11,6 +11,8 @@ minetest.register_node("naturia2:"..name.."_tree", {
 	on_place = minetest.rotate_node
 })
 
+naturia.expowers["naturia2:"..name.."_tree"]=5
+
 minetest.register_node("naturia2:"..name.."_wood", {
 	description = "Packaged "..cName.." Wood",
 	paramtype2 = "facedir",
@@ -20,6 +22,8 @@ minetest.register_node("naturia2:"..name.."_wood", {
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2, wood = 1},
 	sounds = default.node_sound_wood_defaults(),
 })
+
+naturia.expowers["naturia2:"..name.."_wood"]=2
 
 minetest.register_node("naturia2:"..name.."_leaves", {
 	description = cName.." Leaves",
@@ -34,11 +38,11 @@ minetest.register_node("naturia2:"..name.."_leaves", {
 		max_items = 1,
 		items = {
 			{
-				items = {"naturia2:sapling_"..name},
+				items = {"naturia2:"..name.."_sapling"},
 				rarity = 20,
 			},
 			{
-				items = {"naturia2:leaves_"..name},
+				items = {"naturia2:"..name.."_leaves"},
 			}
 		}
 	},
@@ -46,6 +50,8 @@ minetest.register_node("naturia2:"..name.."_leaves", {
 
 	after_place_node = after_place_leaves,
 })
+
+naturia.expowers["naturia2:"..name.."_leaves"]=5
 
 minetest.register_node("naturia2:"..name.."_sapling", {
 	description = cName.." Sapling",
@@ -66,6 +72,8 @@ minetest.register_node("naturia2:"..name.."_sapling", {
 	sounds = default.node_sound_leaves_defaults(),
 })
 
+naturia.expowers["naturia2:"..name.."_sapling"]=9
+
 if berry then
 	minetest.register_node("naturia2:"..name.."_berries", {
 	description = cName.." Leaves",
@@ -81,6 +89,7 @@ if berry then
 
 	after_place_node = after_place_leaves,
 })
+naturia.expowers["naturia2:"..name.."_berries"]=3
 end
 if schem then
 minetest.register_decoration({
@@ -133,7 +142,7 @@ minetest.register_node("naturia2:paste", {
 	description = "paste",
 	tiles = {"n2_paste2.png"},
 	drop = "",
-	connects_to={"naturia2:paste", "naturia2:stone_i"},
+	connects_to={"naturia2:paste", "naturia2:rune_1", "naturia2:pedestal", "naturia2:ennolte", "naturia2:rune_2"},
 	walkable = false,
 	sounds = default.node_sound_leaves_defaults(),
 	groups={not_in_creative_inventory=1, snappy=3},
@@ -148,6 +157,60 @@ minetest.register_node("naturia2:paste", {
 		connect_right =  {-0.125, -0.5, -0.125, 0.5, -0.47, 0.125},
 	}
 })
+
+local function copy(t)
+	local l={}
+	for _,v in pairs(t) do
+		l[_]=v
+	end
+	return l
+end
+
+naturia.collectStructure=function(pos, acceptable)
+	local iPos=copy(pos)
+	local stc = {[pos.x..pos.y..pos.z]=pos}
+	local l2={iPos}
+	local con=1
+	while con > 0 do
+		con=0
+		for _,v in pairs(l2) do
+			local npos = copy(v)
+			npos.x=npos.x+1
+			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
+				stc[npos.x..npos.y..npos.z]=copy(npos)
+				table.insert(l2, copy(npos))
+				con=con+1
+			end
+			local npos = copy(v)
+			npos.x=npos.x-1
+			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
+				stc[npos.x..npos.y..npos.z]=copy(npos)
+				table.insert(l2, copy(npos))
+				con=con+1
+			end
+			local npos = copy(v)
+			npos.z=npos.z+1
+			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
+				stc[npos.x..npos.y..npos.z]=copy(npos)
+				table.insert(l2, copy(npos))
+				con=con+1
+			end
+			local npos = copy(v)
+			npos.z=npos.z-1
+			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
+				stc[npos.x..npos.y..npos.z]=copy(npos)
+				table.insert(l2, copy(npos))
+				con=con+1
+			end
+		end
+	end
+	
+	for k,v in pairs(stc) do
+		stc[k].name=minetest.get_node(v).name
+	end
+	
+	return(stc)
+end
 
 minetest.register_node("naturia2:nightshade_growing", {
 	description = "Nightshade",
@@ -254,19 +317,6 @@ minetest.register_node("naturia2:ennolte", {
 	on_destruct = function(pos)
 		d(pos)
 	end,
-	on_punch = function(pos, node, player, pointed_thing)
-		if player:get_wielded_item():get_definition().groups.axe==1 then
-			local meta=minetest.get_meta(pos)
-			local item=meta:get_string("item")
-			if item then
-				if truCraft.chops[item] then
-					rm(pos)
-					minetest.add_item({x=pos.x,y=pos.y+1,z=pos.z}, truCraft.chops[item])
-					meta:set_string("item", "")
-				end
-			end
-		end
-	end,
 })
 
 minetest.register_lbm({
@@ -284,6 +334,7 @@ minetest.register_lbm({
 	end,
 })
 
+
 minetest.register_node("naturia2:rune_1", {
 	description="Oghess",
 	tiles={"default_stone.png", "default_stone.png", "default_stone.png^n2_rune1.png"},
@@ -296,9 +347,227 @@ minetest.register_node("naturia2:rune_1", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.3, -0.4, -0.3, 0.3, 0.4, 0.3},
+			{-0.3, -0.3, -0.3, 0.3, 0.4, 0.3},
 			{-0.2, -0.4, -0.2, 0.2, 0.5, 0.2},
-			{-0.35, -0.5, -0.35, 0.35, -0.4, 0.35},
+			{-0.5, -0.5, -0.5, 0.5, -0.4, 0.5},
+		},
+	},
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		if itemstack:get_name()=="naturia2:rowan_wand" then
+			local acc={["naturia2:paste"]=1, ["naturia2:pedestal"]=1, ["naturia2:ennolte"]=1, ["naturia2:rune_2"]=1}
+			local struct=naturia.collectStructure(pos, acc)
+			local flow=0
+			local power=0
+			local connection=0
+			local map={}
+			for _,v in pairs(struct) do
+				if v.name=="naturia2:paste" then
+					flow=flow+5
+					if acc[minetest.get_node({x=v.x+1, y=v.y, z=v.z}).name] then
+						flow=flow-1
+						connection=connection+1
+					end
+					if acc[minetest.get_node({x=v.x-1, y=v.y, z=v.z}).name] then
+						flow=flow-1
+						connection=connection+1
+					end
+					if acc[minetest.get_node({x=v.x, y=v.y, z=v.z+1}).name] then
+						flow=flow-1
+						connection=connection+1
+					end
+					if acc[minetest.get_node({x=v.x, y=v.y, z=v.z-1}).name] then
+						flow=flow-1
+						connection=connection+1
+					end
+				elseif v.name=="naturia2:rune_2" then
+					power=power+15
+				end
+			end
+			local poses={
+				[1]={x=pos.x, y=pos.y, z=pos.z+3},
+				[2]={x=pos.x+1, y=pos.y, z=pos.z+3},
+				[3]={x=pos.x+2, y=pos.y, z=pos.z+2},
+				[4]={x=pos.x+3, y=pos.y, z=pos.z+1},
+				[5]={x=pos.x+3, y=pos.y, z=pos.z},
+				[6]={x=pos.x+3, y=pos.y, z=pos.z-1},
+				[7]={x=pos.x+2, y=pos.y, z=pos.z-2},
+				[8]={x=pos.x+1, y=pos.y, z=pos.z-3},
+				[9]={x=pos.x, y=pos.y, z=pos.z-3},
+				[10]={x=pos.x-1, y=pos.y, z=pos.z-3},
+				[11]={x=pos.x-2, y=pos.y, z=pos.z-2},
+				[12]={x=pos.x-3, y=pos.y, z=pos.z-1},
+				[13]={x=pos.x-3, y=pos.y, z=pos.z},
+				[15]={x=pos.x-3, y=pos.y, z=pos.z+1},
+				[16]={x=pos.x-2, y=pos.y, z=pos.z+2},
+				[17]={x=pos.x-1, y=pos.y, z=pos.z+3},
+			}
+			
+			local poses2={
+				[1]={x=pos.x, y=pos.y, z=pos.z+4},
+				[2]={x=pos.x, y=pos.y, z=pos.z-4},
+				[3]={x=pos.x+4, y=pos.y, z=pos.z},
+				[4]={x=pos.x-4, y=pos.y, z=pos.z},
+				[5]={x=pos.x+3, y=pos.y, z=pos.z+3},
+				[6]={x=pos.x-3, y=pos.y, z=pos.z-3},
+				[7]={x=pos.x+3, y=pos.y, z=pos.z-3},
+				[8]={x=pos.x-3, y=pos.y, z=pos.z+3},
+			}
+			
+			local sp=""
+			local xp="naturia2:ennoltenaturia2:pedestalnaturia2:ennoltenaturia2:pedestalnaturia2:ennoltenaturia2:pedestalnaturia2:ennoltenaturia2:pedestalnaturia2:ennoltenaturia2:pedestalnaturia2:ennoltenaturia2:pedestalnaturia2:ennolte"
+			for _,p in ipairs(poses) do
+				local n=minetest.get_node(p).name
+				sp=sp..n
+			end
+			
+			local sp2=""
+			local xp2="naturia2:ennoltenaturia2:ennoltenaturia2:ennoltenaturia2:ennoltenaturia2:ennoltenaturia2:ennoltenaturia2:ennoltenaturia2:ennolte"
+			for _,p in ipairs(poses2) do
+				local n=minetest.get_node(p).name
+				sp2=sp2..n
+			end
+			
+			if sp==xp and sp2==xp2 then
+				naturia.begin_crafting(pos, flow, power, connection, player)
+				
+			end			
+		end
+	end
+})
+
+minetest.register_node("naturia2:naghota_growing", {
+	description = "Twyfon",
+	drawtype = "plantlike",
+	tiles = {"n2_naghota.png"},
+	inventory_image = "n2_naghota.png",
+	wield_image = "n2_naghota.png",
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	selection_box = {
+		type = "fixed",
+		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 0.5, 6 / 16},
+	},
+	groups = {snappy = 3, flammable = 2, not_in_creative_inventory=1},
+	sounds = default.node_sound_leaves_defaults(),
+	drop="naturia2:naghota",
+})
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_coniferous_litter"},
+	sidelen = 16,
+	fill_ratio=0.0002,
+	y_min = -300,
+	y_max = 300,
+	decoration="naturia2:naghota_growing",
+})
+
+minetest.register_node("naturia2:urglin", {
+	description = "Krén Jasper",
+	place_param2 = 0,
+	tiles = {"n2_urglin.png"},
+	is_ground_content = false,
+	groups = {cracky=1},
+	sounds = default.node_sound_wood_defaults(),
+})
+
+naturia.expowers["naturia2:urglin"]=5
+
+minetest.register_node("naturia2:merlith", {
+	description = "Krén Jasper Lattice",
+	drawtype="glasslike",
+	use_texture_alpha=true,
+	place_param2 = 0,
+	tiles = {"n2_urglin2.png"},
+	is_ground_content = false,
+	groups = {cracky=1},
+	sounds = default.node_sound_wood_defaults(),
+})
+
+naturia.expowers["naturia2:merlith"]=6
+
+minetest.register_node("naturia2:essence_crystal", {
+	description = "Wrglyd",
+	drawtype="nodebox",
+	use_texture_alpha=true,
+	sunlight_propagates=true,
+	paramtype="light",
+	place_param2 = 0,
+	tiles = {"n2_urglin2.png"},
+	is_ground_content = false,
+	groups = {cracky=1},
+	sounds = default.node_sound_glass_defaults(),
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.015, -0.4, -0.015, 0.015, 0.4, 0.015},
+			{-0.03, -0.25, -0.03, 0.03, 0.25, 0.03},
+			{-0.05, -0.2, -0.05, 0.05, 0.2, 0.05},
+		},
+	},
+})
+
+minetest.register_node("naturia2:pedestal", {
+	description="Glydoin",
+	tiles={"default_desert_stone.png"},
+	sunlight_propagates=true,
+	is_ground_content=false,
+	groups={cracky=3, oddly_breakable_by_hand=3},
+	sounds=default.node_sound_stone_defaults(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.1, -0.4, -0.1, 0.1, 0.4, 0.1},
+			{-0.2, 0.4, -0.2, 0.2, 0.5, 0.2},
+			{-0.25, -0.4, -0.25, 0.25, -0.3, 0.25},
+			{-0.5, -0.5, -0.5, 0.5, -0.4, 0.5},
+		},
+	},
+})
+
+minetest.register_node("naturia2:rune_2", {
+	description="Aésilith",
+	tiles={"default_cobble.png"},
+	sunlight_propagates=true,
+	is_ground_content=false,
+	groups={cracky=3, oddly_breakable_by_hand=3},
+	sounds=default.node_sound_stone_defaults(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.45, -0.4, -0.2, 0.45, 1.5, 0.2},
+			{-0.2, -0.4, -0.45, 0.2, 1.5, 0.45},
+			{-0.35, -0.4, -0.35, 0.35, 1.6, 0.35},
+			{-0.3, -0.4, -0.3, 0.3, 1.8, 0.3},
+			{-0.25, -0.4, -0.25, 0.25, 2.2, 0.25},
+			{-0.15, -0.4, -0.15, 0.15, 2.5, 0.15},
+			{-0.5, -0.5, -0.5, 0.5, -0.4, 0.5},
+		},
+	},
+})
+
+minetest.register_node("naturia2:essence_crystal_invert", {
+	description = "Wrglyd Nerí",
+	drawtype="nodebox",
+	use_texture_alpha=true,
+	sunlight_propagates=true,
+	paramtype="light",
+	place_param2 = 0,
+	tiles = {"n2_urglin3.png"},
+	is_ground_content = false,
+	groups = {cracky=1},
+	sounds = default.node_sound_glass_defaults(),
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.015, -0.4, -0.015, 0.015, 0.4, 0.015},
+			{-0.03, -0.25, -0.03, 0.03, 0.25, 0.03},
+			{-0.05, -0.2, -0.05, 0.05, 0.2, 0.05},
 		},
 	},
 })

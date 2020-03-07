@@ -122,55 +122,92 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output="naturia2:incense",
-	recipe={"naturia2:mildew", "naturia2:rowan_stick", "naturia2:coagulant"},
-	type="shapeless",
-	replacements={{"naturia2:mildew","naturia2:bottle_2 2"}}
-})
-
-minetest.register_craft({
-	output="naturia2:incense_attach",
-	recipe={"naturia2:incense", "naturia2:acid"},
-	replacements={{"naturia2:acid","naturia2:bottle_2"}},
-	type="shapeless",
-})
-
-minetest.register_craft({
-	output="naturia2:incense_flow",
-	recipe={"naturia2:incense", "naturia2:coagulant"},
-	replacements={{"naturia2:coagulant","naturia2:bottle_2"}},
-	type="shapeless",
-})
-
-minetest.register_craft({
-	output="naturia2:incense_nsp",
-	recipe={"naturia2:incense", "naturia2:rowan_sprig"},
-	type="shapeless",
-})
-
-minetest.register_craft({
-	output="naturia2:incense_asp",
-	recipe={"naturia2:incense", "naturia2:yew_leaves"},
-	type="shapeless",
-})
-
-minetest.register_craft({
-	output="naturia2:incense_heal",
-	recipe={"naturia2:incense", "naturia2:nightshade"},
-	type="shapeless",
-})
-
-minetest.register_craft({
-	output="naturia2:incense_harm",
-	recipe={"naturia2:incense", "naturia2:yarrow"},
-	type="shapeless",
-})
-
-minetest.register_craft({
 	output="naturia2:ennolte",
 	recipe={
 		{"", "default:cobble", ""},
 		{"", "default:stone", ""},
 		{"default:stone", "default:stone", "default:stone"}
+	},
+})
+
+minetest.register_craft({
+	output="naturia2:invertor",
+	recipe={"naturia2:mortar", "naturia2:naghota", "naturia2:bottle_2"},
+	type="shapeless",
+	replacements={{"naturia2:mortar","naturia2:mortar"}}
+})
+
+minetest.register_craft({
+	output="naturia2:guide",
+	recipe={
+		{"", "default:stone", ""},
+		{"default:stone", "default:sapling", "default:stone"},
+		{"default:stone", "default:stone", "default:stone"}
+	},
+})
+
+minetest.register_craft({
+	output="naturia2:rune_1",
+	recipe={
+		{"", "default:stone", ""},
+		{"", "default:cobble", "naturia2:acid"},
+		{"", "default:stone", ""}
+	},
+	replacements={{"naturia2:acid","naturia2:bottle_2"}},
+})
+
+minetest.register_craft({
+	output="naturia2:urglin 8",
+	recipe={
+		{"naturia2:beech_wood", "naturia2:beech_wood", "naturia2:beech_wood"},
+		{"naturia2:beech_wood", "naturia2:invertor", "naturia2:beech_wood"},
+		{"naturia2:beech_wood", "naturia2:beech_wood", "naturia2:beech_wood"}
+	},
+	replacements={{"naturia2:invertor","naturia2:bottle_2"}},
+})
+
+minetest.register_craft({
+	output="naturia2:merlith 8",
+	recipe={
+		{"naturia2:urglin", "naturia2:urglin", "naturia2:urglin"},
+		{"naturia2:urglin", "naturia2:acid", "naturia2:urglin"},
+		{"naturia2:urglin", "naturia2:urglin", "naturia2:urglin"}
+	},
+	replacements={{"naturia2:acid","naturia2:bottle_2"}},
+})
+
+minetest.register_craft({
+	output="naturia2:merlith 8",
+	recipe={
+		{"naturia2:urglin", "naturia2:urglin", "naturia2:urglin"},
+		{"naturia2:urglin", "naturia2:acid", "naturia2:urglin"},
+		{"naturia2:urglin", "naturia2:urglin", "naturia2:urglin"}
+	},
+	replacements={{"naturia2:acid","naturia2:bottle_2"}},
+})
+
+minetest.register_craft({
+	output="naturia2:essence_crystal",
+	recipe={"naturia2:knife2", "naturia2:merlith"},
+	type="shapeless",
+	replacements={{"naturia2:knife2","naturia2:knife2"}}
+})
+
+minetest.register_craft({
+	output="naturia2:pedestal",
+	recipe={
+		{"", "default:desert_stone", ""},
+		{"", "default:desert_stone", "naturia2:acid"},
+		{"", "default:desert_stone", ""}
+	},
+	replacements={{"naturia2:acid","naturia2:bottle_2"}},
+})
+
+minetest.register_craft({
+	output="naturia2:rune_2",
+	recipe={
+		{"", "default:cobble", ""},
+		{"", "default:cobble", ""},
+		{"default:cobble", "naturia2:essence_crystal", "default:cobble"}
 	},
 })

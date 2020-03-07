@@ -1,21 +1,26 @@
 
 guideBooks.Common.register_guideBook("naturia2:guide", {
-	inventory_image="poly_guide.png",
-	description_short="Arbhomancer's Field Guide",
-	description_long="",
+	inventory_image="n2_guidestone.png",
+	description_short="Coextant",
+	description_long=minetest.colorize("#888888", "Naturia 2 Guide"),
 	style={
 		cover={
-			bg="poly_abc_guide_cover.png",
-			next="poly_abc_guide_arrownext.png"
+			bg="n2_fbg2.png",
+			next="n2_frn.png",
+			w=10,
+			h=10
 		},
 		page={
-			bg="poly_abc_guide_cover.png",
-			next="poly_abc_guide_arrownext.png",
-			prev="poly_abc_guide_arrowprev.png",
-			begn="poly_abc_guide_arrowup.png"
+			bg="n2_fbg.png",
+			next="n2_frn.png",
+			prev="n2_frp.png",
+			start="n2_frb.png",
+			w=10,
+			h=10
 		},
-		buttonGeneric="poly_abc_guide_btn.png"
-	}
+		buttonGeneric="n2_fbg.png",
+	},
+	ptype=true,
 })
 
 guideBooks.Common.register_section("naturia2:guide","tutorial", {
@@ -25,6 +30,5 @@ guideBooks.Common.register_page("naturia2:guide", "tutorial", 1, {
 	text1=[[
 		
 	]], 
-	text2=[[]],
 	extra=[[]]
 })
