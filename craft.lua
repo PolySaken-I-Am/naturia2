@@ -211,3 +211,10 @@ minetest.register_craft({
 		{"default:cobble", "naturia2:essence_crystal", "default:cobble"}
 	},
 })
+
+minetest.register_craft({
+	output="naturia2:poison",
+	recipe={"naturia2:mortar", "naturia2:nightshade", "naturia2:bottle_1"},
+	type="shapeless",
+	replacements={{"naturia2:mortar","naturia2:mortar"}}
+})

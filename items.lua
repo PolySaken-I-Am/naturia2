@@ -121,3 +121,15 @@ minetest.register_craftitem("naturia2:invertor", {
 	inventory_image = "n2_invertor.png",
 })
 naturia.expowers["naturia2:invertor"]=11
+
+minetest.register_craftitem("naturia2:nightshade", {
+	description = "Nightshade Leaf",
+	inventory_image = "n2_nightshade_i.png",
+})
+naturia.expowers["naturia2:nightshade"]=4
+
+minetest.register_craftitem("naturia2:poison", {
+	description = "Poison",
+	inventory_image = "n2_poison.png",
+})
+naturia.expowers["naturia2:poison"]=3
