@@ -140,3 +140,22 @@ naturia.register_ritual_craft({
 	["15"]="naturia2:merlith",
 	["16"]="naturia2:essence_crystal"
 }, "naturia2:essence_crystal_invert")
+
+naturia.register_ritual_craft({
+	["1"]="naturia2:poison",
+	["2"]="naturia2:essence_crystal_invert",
+	["3"]="naturia2:coagulant",
+	["4"]="naturia2:essence_crystal_invert",
+	["5"]="default:flint",
+	["6"]="naturia2:essence_crystal",
+	["7"]="naturia2:acid",
+	["8"]="naturia2:essence_crystal",
+	["9"]="default:apple",
+	["10"]="naturia2:essence_crystal",
+	["11"]="naturia2:poison",
+	["12"]="naturia2:essence_crystal",
+	["13"]="naturia2:poison",
+	["14"]="naturia2:essence_crystal",
+	["15"]="naturia2:poison",
+	["16"]="naturia2:essence_crystal"
+}, "naturia2:cutra_1 4")

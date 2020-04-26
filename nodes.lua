@@ -158,60 +158,6 @@ minetest.register_node("naturia2:paste", {
 	}
 })
 
-local function copy(t)
-	local l={}
-	for _,v in pairs(t) do
-		l[_]=v
-	end
-	return l
-end
-
-naturia.collectStructure=function(pos, acceptable)
-	local iPos=copy(pos)
-	local stc = {[pos.x..pos.y..pos.z]=pos}
-	local l2={iPos}
-	local con=1
-	while con > 0 do
-		con=0
-		for _,v in pairs(l2) do
-			local npos = copy(v)
-			npos.x=npos.x+1
-			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
-				stc[npos.x..npos.y..npos.z]=copy(npos)
-				table.insert(l2, copy(npos))
-				con=con+1
-			end
-			local npos = copy(v)
-			npos.x=npos.x-1
-			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
-				stc[npos.x..npos.y..npos.z]=copy(npos)
-				table.insert(l2, copy(npos))
-				con=con+1
-			end
-			local npos = copy(v)
-			npos.z=npos.z+1
-			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
-				stc[npos.x..npos.y..npos.z]=copy(npos)
-				table.insert(l2, copy(npos))
-				con=con+1
-			end
-			local npos = copy(v)
-			npos.z=npos.z-1
-			if acceptable[minetest.get_node(npos).name] and not stc[npos.x..npos.y..npos.z] then
-				stc[npos.x..npos.y..npos.z]=copy(npos)
-				table.insert(l2, copy(npos))
-				con=con+1
-			end
-		end
-	end
-	
-	for k,v in pairs(stc) do
-		stc[k].name=minetest.get_node(v).name
-	end
-	
-	return(stc)
-end
-
 minetest.register_node("naturia2:nightshade_growing", {
 	description = "Nightshade",
 	drawtype = "plantlike",
@@ -355,7 +301,7 @@ minetest.register_node("naturia2:rune_1", {
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		if itemstack:get_name()=="naturia2:rowan_wand" then
 			local acc={["naturia2:paste"]=1, ["naturia2:pedestal"]=1, ["naturia2:ennolte"]=1, ["naturia2:rune_2"]=1}
-			local struct=naturia.collectStructure(pos, acc)
+			local struct=visionLib.Schem.GetConnected(pos, acc)
 			local flow=0
 			local power=0
 			local connection=0

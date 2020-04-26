@@ -218,3 +218,9 @@ minetest.register_craft({
 	type="shapeless",
 	replacements={{"naturia2:mortar","naturia2:mortar"}}
 })
+
+minetest.register_craft({
+	output="naturia2:uncutra",
+	recipe={"naturia2:cutra_1", "naturia2:invertor"},
+	type="shapeless",
+})

@@ -133,3 +133,42 @@ minetest.register_craftitem("naturia2:poison", {
 	inventory_image = "n2_poison.png",
 })
 naturia.expowers["naturia2:poison"]=3
+
+minetest.register_craftitem("naturia2:claws_1", {
+	wield_image = "n2_hand.png",
+	wield_scale = {x=1,y=1,z=2.5},
+	tool_capabilities = {
+		full_punch_interval = 0.7,
+		max_drop_level = 0,
+		groupcaps = {
+			crumbly = {times={[2]=1.00, [3]=0.230}, uses=0, maxlevel=1},
+			snappy = {times={[3]=0.10}, uses=0, maxlevel=1},
+			oddly_breakable_by_hand = {times={[1]=1.50,[2]=1.00,[3]=0.40}, uses=0}
+		},
+		damage_groups = {fleshy=5},
+	}
+})
+
+minetest.register_craftitem("naturia2:cutra_1", {
+	description = "Cuìtra Jan",
+	inventory_image = "n2_cutra.png",
+	stack_max=1,
+	on_use=function(itemstack, player, pointed_thing)
+		player:get_inventory():set_size("hand", 1)
+		player:get_inventory():set_stack("hand", 1, "naturia2:claws_1")
+		itemstack:take_item()
+		return itemstack
+	end
+})
+
+minetest.register_craftitem("naturia2:uncutra", {
+	description = "Cuìtra Nerí",
+	inventory_image = "n2_cutra2.png",
+	stack_max=1,
+	on_use=function(itemstack, player, pointed_thing)
+		player:get_inventory():set_size("hand", 1)
+		player:get_inventory():set_stack("hand", 1, "")
+		itemstack:take_item()
+		return itemstack
+	end
+})
